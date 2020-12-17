@@ -1,9 +1,6 @@
 <template>
   <div class="nav">
     <router-link to="/money">
-      <svg>
-        <use xlink:href="#label"/>
-      </svg>
       记账
     </router-link>
     |
@@ -14,15 +11,14 @@
 </template>
 
 <script lang="ts">
-import x from '@/assets/icons/label.svg';
-import y from '@/assets/icons/money.svg';
 
-console.log(x);
-console.log(y);
+// 引入所有的 svg
+const importAll = (requireContext: __WebpackModuleApi.RequireContext) => requireContext.keys().forEach(requireContext)
+try {importAll(require.context('../assets/icons/', true, /\.svg$/))} catch (error) {console.log(error)}
 
 export default {
   name: 'Nav'
-};
+}
 </script>
 
 <style lang="scss" scoped> /*scoped只会影响当前template的样式*/
