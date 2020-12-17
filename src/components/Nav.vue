@@ -1,6 +1,11 @@
 <template>
   <div class="nav">
-    <router-link to="/money">记账</router-link>
+    <router-link to="/money">
+      <svg>
+        <use xlink:href="#label"/>
+      </svg>
+      记账
+    </router-link>
     |
     <router-link to="/labels">标签</router-link>
     |
@@ -9,6 +14,12 @@
 </template>
 
 <script lang="ts">
+import x from '@/assets/icons/label.svg';
+import y from '@/assets/icons/money.svg';
+
+console.log(x);
+console.log(y);
+
 export default {
   name: 'Nav'
 };
