@@ -22,6 +22,8 @@ export default {
 </script>
 
 <style lang="scss" scoped> /*scoped只会影响当前template的样式*/
+@import "~@/assets/style/helper.scss";
+
 nav {
   display: flex;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
@@ -44,7 +46,7 @@ nav {
   }
 
   > .item.selected {
-    color: #333;
+    color: $color-highlight;
   }
 }
 </style>
