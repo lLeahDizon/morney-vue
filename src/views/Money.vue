@@ -19,19 +19,23 @@
     tags?: string[]
     notes: string
     type: string
-    amount: number
+    amount: number // 数据类型 object | string
+    createdAt?: Date // 类 / 构造函数
   }
+
+  window.localStorage.setItem('version', '0.0.1');
 
   @Component({
     components: {Tags, Notes, Types, NumberPad},
   })
   export default class Money extends Vue {
     tags = ['衣', '食', '住', '行'];
-    recordList: Record[] = [];
+    recordList: Record[] = JSON.parse(window.localStorage.getItem('recordList') || '[]');
     record: Record = {tags: [], notes: '', type: '-', amount: 0};
 
     saveRecord() {
-      const deepClone = JSON.parse(JSON.stringify(this.record));
+      const deepClone: Record = JSON.parse(JSON.stringify(this.record));
+      deepClone.createdAt = new Date();
       this.recordList.push(deepClone);
       console.log(this.recordList);
     }
