@@ -3,7 +3,8 @@
     <span class="name">备注</span>
     <input
       type="text"
-      v-model="value"
+      v-model="notes"
+      @input="$emit('update:value', notes)"
       placeholder="在这里添加备注"
     >
   </label>
@@ -11,11 +12,12 @@
 
 <script lang="ts">
   import Vue from 'vue';
-  import {Component} from 'vue-property-decorator';
+  import {Component, Prop} from 'vue-property-decorator';
 
   @Component
   export default class Notes extends Vue {
-    value = '';
+    @Prop() readonly value!: string;
+    notes = this.value;
   }
 </script>
 
