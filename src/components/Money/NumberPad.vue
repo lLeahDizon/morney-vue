@@ -58,8 +58,9 @@
     }
 
     ok() {
-      // todo 记账
       this.$emit('update:value', this.output);
+      this.$emit('submit');
+      this.clear();
     }
   }
 </script>
