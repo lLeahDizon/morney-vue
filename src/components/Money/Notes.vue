@@ -1,11 +1,11 @@
 <template>
   <label class="notes">
-    <span class="name">备注</span>
+    <span class="name">{{ fieldName }}</span>
     <input
       type="text"
       v-model="notes"
       @input="$emit('update:value', notes)"
-      placeholder="在这里添加备注"
+      :placeholder="placeholder"
     >
   </label>
 </template>
@@ -17,6 +17,8 @@
   @Component
   export default class Notes extends Vue {
     @Prop() readonly value!: string;
+    @Prop({required: true}) fieldName!: string;
+    @Prop() placeholder?: string;
     notes = this.value;
   }
 </script>
