@@ -3,8 +3,8 @@
     <span class="name">{{ fieldName }}</span>
     <input
       type="text"
-      v-model="notes"
-      @input="$emit('update:value', notes)"
+      :value="value"
+      @input="$emit('update:value', $event.target.value)"
       :placeholder="placeholder"
     >
   </label>
@@ -19,7 +19,6 @@
     @Prop({default: ''}) readonly value!: string;
     @Prop({required: true}) fieldName!: string;
     @Prop() placeholder?: string;
-    notes = this.value;
   }
 </script>
 
