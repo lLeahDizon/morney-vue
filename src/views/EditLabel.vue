@@ -6,12 +6,15 @@
       <span class="rightIcon"></span>
     </div>
     <div class="form-wrapper">
-      <FormItem field-name="标签名" placeholder="请输入标签名" :value.sync="name"/>
+      <FormItem
+        field-name="标签名"
+        placeholder="请输入标签名"
+        :value.sync="name"
+      />
     </div>
     <div class="button-wrapper">
       <Button>删除标签</Button>
     </div>
-
   </Layout>
 </template>
 
@@ -26,6 +29,7 @@
     components: {Button, FormItem}
   })
   export default class EditLabel extends Vue {
+    tag: Tag = undefined;
     name: string = '';
 
     created() {
