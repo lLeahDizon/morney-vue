@@ -38,7 +38,6 @@
       const deepClone: RecordItem = recordListModel.clone(this.record);
       deepClone.createdAt = new Date();
       this.recordList.push(deepClone);
-      console.log(this.recordList);
     }
 
     @Watch('recordList')
