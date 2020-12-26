@@ -22,7 +22,6 @@
   import Tags from '@/components/Money/Tags.vue';
   import recordListModel from '@/models/recordListModel';
   import tagListModel from '@/models/tagListModel';
-  import clone from '@/lib/clone';
 
   const recordList = recordListModel.fetch();
   const tagList = tagListModel.fetch();
