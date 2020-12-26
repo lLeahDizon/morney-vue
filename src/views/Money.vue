@@ -6,7 +6,7 @@
       <FormItem
         field-name="备注"
         placeholder="在这里输入备注"
-        :value.sync="record.notes"
+        @update:value="onUpdateNotes"
       />
     </div>
     <Tags :data-source.sync="tags" :value.sync="record.tags"/>
@@ -22,6 +22,7 @@
   import Tags from '@/components/Money/Tags.vue';
   import recordListModel from '@/models/recordListModel';
   import tagListModel from '@/models/tagListModel';
+  import clone from '@/lib/clone';
 
   const recordList = recordListModel.fetch();
   const tagList = tagListModel.fetch();
@@ -34,15 +35,17 @@
     recordList: RecordItem[] = recordList;
     record: RecordItem = {tags: [], notes: '', type: '-', amount: 0};
 
+    onUpdateNotes(value: string) {
+      this.record.notes = value;
+    }
+
     saveRecord() {
-      const deepClone: RecordItem = recordListModel.clone(this.record);
-      deepClone.createdAt = new Date();
-      this.recordList.push(deepClone);
+      recordListModel.create(this.record);
     }
 
     @Watch('recordList')
     onRecordListChange() {
-      recordListModel.save(this.recordList);
+      recordListModel.save();
     }
   }
 </script>
