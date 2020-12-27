@@ -7,6 +7,7 @@ const recordListModel = {
     const deepClone: RecordItem = clone(record);
     deepClone.createdAt = new Date();
     this.data.push(deepClone);
+    this.save();
   },
   fetch() {
     this.data = JSON.parse(window.localStorage.getItem(localStorageKeyName) || '[]') as RecordItem[];
