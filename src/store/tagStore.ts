@@ -16,22 +16,20 @@ const tagStore = {
   },
   createTag() {
     const name = window.prompt('请输入标签名');
-    if (name) {
-      if (name === '') {
-        window.alert('标签名不能为空');
-        return 'empty';
+    if (!name) {
+      window.alert('标签名不能为空');
+      return 'empty';
+    } else {
+      const names = this.tagList.map(item => item.name);
+      if (names && names.indexOf(name) >= 0) {
+        window.alert('标签名重复了');
+        return 'duplicated';
       } else {
-        const names = this.tagList.map(item => item.name);
-        if (names && names.indexOf(name) >= 0) {
-          window.alert('标签名重复了');
-          return 'duplicated';
-        } else {
-          const id = createId().toString();
-          this.tagList.push({id, name});
-          this.saveTags();
-          window.alert('添加成功');
-          return 'success';
-        }
+        const id = createId().toString();
+        this.tagList.push({id, name});
+        this.saveTags();
+        window.alert('添加成功');
+        return 'success';
       }
     }
   },

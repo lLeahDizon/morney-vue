@@ -5,10 +5,10 @@
     </div>
     <ul class="current">
       <li
-        v-for="tag in dataSource"
+        v-for="tag in tagList"
         :key="tag.id"
-        @click="toggle(tag)"
-        :class="{selected:selectedTags.indexOf(tag)>=0}"
+        @click="toggle(tag.id)"
+        :class="{selected:selectedTags.indexOf(tag.id)>=0}"
       >
         {{ tag.name }}
       </li>
@@ -18,21 +18,20 @@
 
 <script lang="ts">
   import Vue from 'vue';
-  import {Component, Prop} from 'vue-property-decorator';
+  import {Component} from 'vue-property-decorator';
   import store from '@/store/index2';
 
   @Component
   export default class Tags extends Vue {
-    @Prop() readonly dataSource: string[] | undefined;
-    @Prop() readonly value!: string[];
-    selectedTags: string[] = this.value;
+    selectedTags: string[] = [];
+    tagList = store.fetchTags();
 
-    toggle(tag: string) {
-      const index = this.selectedTags.indexOf(tag);
+    toggle(id: string) {
+      const index = this.selectedTags.indexOf(id);
       if (index >= 0) {
         this.selectedTags.splice(index, 1);
       } else {
-        this.selectedTags.push(tag);
+        this.selectedTags.push(id);
       }
       this.$emit('update:value', this.selectedTags);
     }
