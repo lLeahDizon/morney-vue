@@ -9,7 +9,7 @@
         @update:value="onUpdateNotes"
       />
     </div>
-    <Tags :data-source.sync="tags" :value.sync="record.tags"/>
+    <Tags :data-source="tags" :value.sync="record.tags"/>
   </Layout>
 </template>
 
@@ -20,13 +20,14 @@
   import Types from '@/components/Money/Types.vue';
   import FormItem from '@/components/Money/FormItem.vue';
   import Tags from '@/components/Money/Tags.vue';
+  import store from '@/store/index2';
 
   @Component({
     components: {Tags, FormItem, Types, NumberPad},
   })
   export default class Money extends Vue {
-    tags = window.tagList;
-    recordList = window.recordList;
+    tags = store.tagList;
+    recordList = store.recordList;
     record: RecordItem = {tags: [], notes: '', type: '-', amount: 0};
 
     onUpdateNotes(value: string) {
@@ -34,7 +35,7 @@
     }
 
     saveRecord() {
-      window.createRecord(this.record);
+      store.createRecord(this.record);
     }
   }
 </script>

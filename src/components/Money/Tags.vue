@@ -1,7 +1,7 @@
 <template>
   <div class="tags">
     <div class="new">
-      <button @click="create">新增标签</button>
+      <button @click="createTag">新增标签</button>
     </div>
     <ul class="current">
       <li
@@ -19,6 +19,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import {Component, Prop} from 'vue-property-decorator';
+  import store from '@/store/index2';
 
   @Component
   export default class Tags extends Vue {
@@ -36,13 +37,8 @@
       this.$emit('update:value', this.selectedTags);
     }
 
-    create() {
-      const name = window.prompt('请输入标签名');
-      if (name === '') {
-        window.alert('标签名不能为空');
-      } else if (this.dataSource) {
-        this.$emit('update:dataSource', [...this.dataSource, name]);
-      }
+    createTag() {
+      store.createTag();
     }
   }
 </script>
