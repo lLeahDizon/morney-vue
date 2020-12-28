@@ -1,30 +1,70 @@
-import tagListModel from '@/models/tagListModel';
+import createId from '@/lib/createId';
 
-export default {
-  // tag store
-  tagList: tagListModel.fetch(),
+const localStorageKeyName = 'tagList';
+
+const tagStore = {
+  tagList: [] as Tag[],
+  fetchTags() {
+    this.tagList = JSON.parse(window.localStorage.getItem(localStorageKeyName) || '[]');
+    return this.tagList;
+  },
+  saveTags() {
+    window.localStorage.setItem(localStorageKeyName, JSON.stringify(this.tagList));
+  },
   findTag(id: string) {
     return this.tagList.filter(t => t.id === id)[0];
   },
-  createTag: () => {
+  createTag() {
     const name = window.prompt('请输入标签名');
     if (name) {
       if (name === '') {
         window.alert('标签名不能为空');
+        return 'empty';
       } else {
-        const message = tagListModel.create(name);
-        if (message === 'duplicated') {
+        const names = this.tagList.map(item => item.name);
+        if (names && names.indexOf(name) >= 0) {
           window.alert('标签名重复了');
-        } else if (message === 'success') {
+          return 'duplicated';
+        } else {
+          const id = createId().toString();
+          this.tagList.push({id, name});
+          this.saveTags();
           window.alert('添加成功');
+          return 'success';
         }
       }
     }
   },
-  removeTag: (id: string) => {
-    return tagListModel.remove(id);
+  removeTag(id: string) {
+    let index = -1;
+    for (let i = 0; i < this.tagList.length; i++) {
+      if (this.tagList[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+    this.tagList.splice(index, 1);
+    this.saveTags();
+    return true;
   },
-  updateTag: (id: string, name: string) => {
-    return tagListModel.update(id, name);
+  updateTag(id: string, name: string) {
+    const idList = this.tagList.map(item => item.id);
+    if (idList && idList.indexOf(id) >= 0) {
+      const tag = this.tagList.filter(item => item.id === id)[0];
+      if (tag) {
+        if (tag.name === name) {
+          return 'duplicated';
+        } else {
+          tag.name = name;
+          this.saveTags();
+          return 'success';
+        }
+      }
+    }
+    return 'not found';
   }
 };
+
+tagStore.fetchTags();
+
+export default tagStore;
