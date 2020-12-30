@@ -7,11 +7,18 @@ Vue.use(Vuex); // 把 store 绑到 vue.prototype
 const recordLocalStorageKeyName = 'recordList';
 const tagLocalStorageKeyName = 'tagList';
 
+type RootState = {
+  recordList: RecordItem[],
+  tagList: Tag[],
+  currentTag?: Tag,
+}
+
 const store = new Vuex.Store({
   state: { // data
-    recordList: [] as RecordItem[],
-    tagList: [] as Tag[],
-  },
+    recordList: [],
+    tagList: [],
+    currentTag: undefined,
+  } as RootState,
   mutations: { // methods
     fetchRecords(state) {
       state.recordList = JSON.parse(window.localStorage.getItem(recordLocalStorageKeyName) || '[]') as RecordItem[];
@@ -32,13 +39,11 @@ const store = new Vuex.Store({
       const names = state.tagList.map(item => item.name);
       if (names && names.indexOf(name) >= 0) {
         window.alert('标签名重复了');
-        return 'duplicated';
       } else {
         const id = createId().toString();
         state.tagList.push({id, name});
         store.commit('saveTags');
         window.alert('添加成功');
-        return 'success';
       }
     },
     saveTags(state) {
@@ -71,7 +76,10 @@ const store = new Vuex.Store({
         }
       }
       return 'not found';
-    }
+    },
+    setCurrentTag(state, id: string) {
+      state.currentTag = state.tagList.filter(t => t.id === id)[0];
+    },
   },
 });
 

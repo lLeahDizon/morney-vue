@@ -26,35 +26,33 @@
   import Button from '@/components/Button.vue';
 
   @Component({
-    components: {Button, FormItem}
+    components: {Button, FormItem},
   })
   export default class EditLabel extends Vue {
-    tag?: Tag = undefined;
+    get tag() {
+      return this.$store.state.currentTag;
+    }
 
     created() {
-      // TODO
-      // this.tag = store.findTag(this.$route.params.id);
-      // if (!this.tag) {
-      //   this.$router.replace('/404');
-      // }
+      this.$store.commit('setCurrentTag', this.$route.params.id);
+      if (!this.tag) {
+        this.$router.replace('/404');
+      }
     }
 
     update(name: string) {
       if (this.tag) {
-        // TODO
-        // store.updateTag(this.tag.id, name);
+        this.$store.commit('updateTag', this.tag.id, name);
       }
     }
 
     remove() {
       if (this.tag) {
-        // TODO
-        return
-        // if (store.removeTag(this.tag.id)) {
-        //   this.$router.back();
-        // } else {
-        //   window.alert('删除失败');
-        // }
+        if (this.$store.commit('removeTag', this.tag.id)) {
+          this.$router.back();
+        } else {
+          window.alert('删除失败');
+        }
       }
     }
 
