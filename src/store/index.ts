@@ -25,6 +25,9 @@ const store = new Vuex.Store({
     saveRecords(state) {
       window.localStorage.setItem(recordLocalStorageKeyName, JSON.stringify(state.recordList));
     },
+    fetchTags(state) {
+      state.tagList = JSON.parse(window.localStorage.getItem(tagLocalStorageKeyName) || '[]');
+    },
     createTag(state) {
       const name = window.prompt('请输入标签名');
       if (!name) {
@@ -38,19 +41,47 @@ const store = new Vuex.Store({
         } else {
           const id = createId().toString();
           state.tagList.push({id, name});
-          // this.saveTags();
+          store.commit('saveTags');
           window.alert('添加成功');
           return 'success';
         }
       }
     },
-    fetchTags(state) {
-      state.tagList = JSON.parse(window.localStorage.getItem(tagLocalStorageKeyName) || '[]');
-      return state.tagList;
+    saveTags(state) {
+      window.localStorage.setItem(tagLocalStorageKeyName, JSON.stringify(state.tagList));
     },
+    removeTag(state, id: string) {
+      let index = -1;
+      for (let i = 0; i < state.tagList.length; i++) {
+        if (state.tagList[i].id === id) {
+          index = i;
+          break;
+        }
+      }
+      state.tagList.splice(index, 1);
+      store.commit('saveTags');
+      return true;
+    },
+    updateTag(state, id: string, name: string) {
+      const idList = state.tagList.map(item => item.id);
+      if (idList && idList.indexOf(id) >= 0) {
+        const tag = state.tagList.filter(item => item.id === id)[0];
+        if (tag) {
+          if (tag.name === name) {
+            return 'duplicated';
+          } else {
+            tag.name = name;
+            store.commit('saveTags');
+            return 'success';
+          }
+        }
+      }
+      return 'not found';
+    }
   },
 });
 
 store.commit('fetchRecords');
+store.commit('fetchTags');
 
 export default store;

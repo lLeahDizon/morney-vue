@@ -23,7 +23,7 @@
   @Component({
     computed: {
       tagList() {
-        return this.$store.commit('fetchTags');
+        return this.$store.state.tagList;
       }
     }
   })
