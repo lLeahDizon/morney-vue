@@ -28,23 +28,17 @@ const store = new Vuex.Store({
     fetchTags(state) {
       state.tagList = JSON.parse(window.localStorage.getItem(tagLocalStorageKeyName) || '[]');
     },
-    createTag(state) {
-      const name = window.prompt('请输入标签名');
-      if (!name) {
-        window.alert('标签名不能为空');
-        return 'empty';
+    createTag(state, name: string) {
+      const names = state.tagList.map(item => item.name);
+      if (names && names.indexOf(name) >= 0) {
+        window.alert('标签名重复了');
+        return 'duplicated';
       } else {
-        const names = state.tagList.map(item => item.name);
-        if (names && names.indexOf(name) >= 0) {
-          window.alert('标签名重复了');
-          return 'duplicated';
-        } else {
-          const id = createId().toString();
-          state.tagList.push({id, name});
-          store.commit('saveTags');
-          window.alert('添加成功');
-          return 'success';
-        }
+        const id = createId().toString();
+        state.tagList.push({id, name});
+        store.commit('saveTags');
+        window.alert('添加成功');
+        return 'success';
       }
     },
     saveTags(state) {
@@ -82,6 +76,5 @@ const store = new Vuex.Store({
 });
 
 store.commit('fetchRecords');
-store.commit('fetchTags');
 
 export default store;
