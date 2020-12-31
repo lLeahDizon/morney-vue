@@ -87,6 +87,4 @@ const store = new Vuex.Store({
   },
 });
 
-store.commit('fetchRecords');
-
 export default store;
