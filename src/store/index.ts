@@ -8,12 +8,6 @@ Vue.use(Vuex); // 把 store 绑到 vue.prototype
 const recordLocalStorageKeyName = 'recordList';
 const tagLocalStorageKeyName = 'tagList';
 
-type RootState = {
-  recordList: RecordItem[],
-  tagList: Tag[],
-  currentTag?: Tag,
-}
-
 const store = new Vuex.Store({
   state: { // data
     recordList: [],
@@ -26,7 +20,7 @@ const store = new Vuex.Store({
     },
     createRecord(state, record) {
       const deepClone: RecordItem = clone(record);
-      deepClone.createdAt = new Date();
+      deepClone.createdAt = new Date().toISOString();
       state.recordList.push(deepClone);
       store.commit('saveRecords');
     },
