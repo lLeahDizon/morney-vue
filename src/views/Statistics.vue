@@ -3,11 +3,15 @@
     <Tabs class-prefix="type" :data-source="recordTypeList" :value.sync="type"/>
     <Tabs class-prefix="interval" :data-source="intervalList" :value.sync="interval"/>
     <ol>
-      <li v-for="(group, index) in result" :key="index">
-        <h3>{{ group.title }}</h3>
+      <li v-for="(group, key) in result" :key="key">
+        <h3 class="title">{{ key }}</h3>
         <ol>
-          <li v-for="item in group.items" :key="item.id">
-            {{ item.amount }} {{ item.createdAt }}
+          <li v-for="item in group" :key="item.id"
+              class="record"
+          >
+            <span>{{ tagString(item.tags) }}</span>
+            <span class="notes">{{ item.notes }}</span>
+            <span>￥{{ item.amount }}</span>
           </li>
         </ol>
       </li>
@@ -26,19 +30,21 @@
     components: {Tabs}
   })
   export default class Statistics extends Vue {
+    tagString(tags: string[]) {
+      return tags.length === 0 ? '无' : tags.join(',');
+    }
+
     get recordList() {
       return (this.$store.state as RootState).recordList;
     }
 
     get result() {
       const {recordList} = this;
-      type HashTableItem = { title: string, items: RecordItem[] }
-
-      const hashTable: { [key: string]: HashTableItem } = {};// 声明一个空对象的类型
+      const hashTable: { [key: string]: RecordItem[] } = {};
       for (let i = 0; i < recordList.length; i++) {
         const [date, time] = recordList[i].createdAt!.split('T');
-        hashTable[date] = hashTable[date] || {title: date, items: []};
-        hashTable[date].items.push(recordList[i]);
+        hashTable[date] = hashTable[date] || [];
+        hashTable[date].push(recordList[i]);
       }
       return hashTable;
     }
@@ -71,5 +77,28 @@
     .interval-tabs-item {
       height: 48px;
     }
+  }
+
+  %item {
+    padding: 8px 16px;
+    line-height: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+  }
+
+  .title {
+    @extend %item;
+  }
+
+  .record {
+    @extend %item;
+    background: white;
+  }
+
+  .notes {
+    margin-right: auto;
+    margin-left: 16px;
+    color: #999;
   }
 </style>
