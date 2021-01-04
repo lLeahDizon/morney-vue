@@ -12,6 +12,7 @@ const store = new Vuex.Store({
   state: { // data
     recordList: [],
     tagList: [],
+    createTagError: null,
     currentTag: undefined,
   } as RootState,
   mutations: { // methods
@@ -23,12 +24,16 @@ const store = new Vuex.Store({
       deepClone.createdAt = new Date().toISOString();
       state.recordList.push(deepClone);
       store.commit('saveRecords');
+      window.alert('已保存');
     },
     saveRecords(state) {
       window.localStorage.setItem(recordLocalStorageKeyName, JSON.stringify(state.recordList));
     },
     fetchTags(state) {
       state.tagList = JSON.parse(window.localStorage.getItem(tagLocalStorageKeyName) || '[]');
+      if (!state.tagList || state.tagList.length === 0) {
+        ['衣', '食', '住', '行'].map(item => store.commit('createTag', item));
+      }
     },
     createTag(state, name: string) {
       const names = state.tagList.map(item => item.name);
@@ -38,7 +43,6 @@ const store = new Vuex.Store({
         const id = createId().toString();
         state.tagList.push({id, name});
         store.commit('saveTags');
-        window.alert('添加成功');
       }
     },
     saveTags(state) {

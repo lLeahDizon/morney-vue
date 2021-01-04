@@ -7,8 +7,8 @@
       <li
         v-for="tag in tagList"
         :key="tag.id"
-        @click="toggle(tag.id)"
-        :class="{selected:selectedTags.indexOf(tag.id)>=0}"
+        @click="toggle(tag)"
+        :class="{selected:selectedTags.indexOf(tag)>=0}"
       >
         {{ tag.name }}
       </li>
@@ -23,7 +23,7 @@
 
   @Component
   export default class Tags extends mixins(TagHelper) {
-    selectedTags: string[] = [];
+    selectedTags: Tag[] = [];
 
     get tagList() {
       return this.$store.state.tagList;
@@ -33,12 +33,12 @@
       this.$store.commit('fetchTags');
     }
 
-    toggle(id: string) {
-      const index = this.selectedTags.indexOf(id);
+    toggle(tag: Tag) {
+      const index = this.selectedTags.indexOf(tag);
       if (index >= 0) {
         this.selectedTags.splice(index, 1);
       } else {
-        this.selectedTags.push(id);
+        this.selectedTags.push(tag);
       }
       this.$emit('update:value', this.selectedTags);
     }

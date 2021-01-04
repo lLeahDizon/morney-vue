@@ -6,10 +6,10 @@
       <FormItem
         field-name="备注"
         placeholder="在这里输入备注"
-        @update:value="onUpdateNotes"
+        :value.sync="record.notes"
       />
     </div>
-    <Tags/>
+    <Tags :value.sync="record.tags"/>
   </Layout>
 </template>
 
@@ -38,12 +38,12 @@
       this.$store.commit('fetchRecords');
     }
 
-    onUpdateNotes(value: string) {
-      this.record.notes = value;
-    }
-
     saveRecord() {
+      if (!this.record.tags || this.record.tags.length === 0) {
+        return window.alert('请至少选择一个标签');
+      }
       this.$store.commit('createRecord', this.record);
+      this.record.notes = '';
     }
   }
 </script>
