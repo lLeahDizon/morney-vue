@@ -1,5 +1,5 @@
 <template>
-  <Layout class-prefix="layout">
+  <Layout class-prefix="layout" :style="{height:height+'px'}">
     <NumberPad :value.sync="record.amount" @submit="saveRecord"/>
     <Tabs :data-source="recordTypeList" :value.sync="record.type"/>
     <div class="notes">
@@ -31,6 +31,8 @@
     }
 
     recordTypeList = recordTypeList;
+
+    height = document.body.clientHeight;
 
     record: RecordItem = {tags: [], notes: '', type: '-', amount: 0};
 
