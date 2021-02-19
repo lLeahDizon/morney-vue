@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import clone from '@/lib/clone';
 import createId from '@/lib/createId';
 import router from '@/router';
+import {Modal} from 'ant-design-vue';
 
 Vue.use(Vuex); // 把 store 绑到 vue.prototype
 const recordLocalStorageKeyName = 'recordList';
@@ -24,7 +25,7 @@ const store = new Vuex.Store({
       deepClone.createdAt = new Date().toISOString();
       state.recordList.push(deepClone);
       store.commit('saveRecords');
-      window.alert('已保存');
+      Modal.success({title: '已保存'});
     },
     saveRecords(state) {
       window.localStorage.setItem(recordLocalStorageKeyName, JSON.stringify(state.recordList));
@@ -62,7 +63,7 @@ const store = new Vuex.Store({
         store.commit('saveTags');
         router.back();
       } else {
-        window.alert('删除失败');
+        Modal.error({title: '删除失败'});
       }
     },
     updateTag(state, payload: { id: string, name: string }) {
@@ -72,7 +73,7 @@ const store = new Vuex.Store({
         const tag = state.tagList.filter(item => item.id === id)[0];
         if (tag) {
           if (tag.name === name) {
-            window.alert('标签名重复了');
+            Modal.warning({title: '标签名重复了'});
           } else {
             tag.name = name;
             store.commit('saveTags');

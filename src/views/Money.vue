@@ -1,5 +1,5 @@
 <template>
-  <Layout class-prefix="layout" :style="{height:height+'px'}">
+  <Layout class-prefix="layout" :layout-style="{height:height+'px'}">
     <NumberPad :value.sync="record.amount" @submit="saveRecord"/>
     <Tabs :data-source="recordTypeList" :value.sync="record.type"/>
     <div class="notes">
