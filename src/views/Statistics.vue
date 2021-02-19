@@ -1,7 +1,8 @@
 <template>
   <Layout>
     <Tabs class-prefix="type" :data-source="recordTypeList" :value.sync="type"/>
-    <ol v-if="groupList.length>0">
+    <echarts v-if="groupList.length > 0" :option="option"/>
+    <ol v-if="groupList.length > 0">
       <li v-for="(group, index) in groupList" :key="index">
         <h3 class="title">{{ beautify(group.title) }} <span>￥{{ group.total }}</span></h3>
         <ol>
@@ -28,9 +29,10 @@
   import recordTypeList from '@/constants/recordTypeList';
   import dayjs from 'dayjs';
   import clone from '@/lib/clone';
+  import Echarts from '@/components/Echarts.vue';
 
   @Component({
-    components: {Tabs}
+    components: {Echarts, Tabs}
   })
   export default class Statistics extends Vue {
     tagString(tags: Tag[]) {
@@ -79,6 +81,51 @@
         group.total = group.items.reduce((sum, item) => sum + item.amount, 0);
       });
       return result;
+    }
+
+    get option() {
+      const {recordList} = this;
+      type Result = { name: string, value: number }[]
+      const newList = clone(recordList)
+        .filter(r => r.type === this.type);
+      if (newList.length === 0) { return [] as Result; }
+      const result: Result = [{name: newList[0].tags[0].name, value: newList[0].amount}];
+      for (let i = 1; i < newList.length; i++) {
+        const current = newList[i];
+        const last = result[result.length - 1];
+        if (last.name === current.tags[0].name) {
+          last.value += current.amount;
+        } else {
+          result.push({name: current.tags[0].name, value: current.amount});
+        }
+      }
+      const total: number = result.reduce((sum, item) => sum + item.value, 0);
+      return {
+        width: '60%',
+        legend: {
+          orient: 'vertical',
+          align: 'left',
+          top: '22%',
+          left: 'right',
+          data: result,
+          formatter: result.length > 0 ? (name) => {
+            const value = result.filter(item => item.name === name)[0].value;
+            return name + ' ' + (value / total * 100).toFixed(1) + ' %';
+          } : '{name}',
+        },
+        series: [
+          {
+            name: '账单统计',
+            type: 'pie',
+            radius: ['40%', '60%'],
+            avoidLabelOverlap: false,
+            label: {
+              show: false,
+            },
+            data: result
+          }
+        ]
+      };
     }
 
     beforeCreate() {
