@@ -1,5 +1,5 @@
 <template>
-  <div class="layout-wrapper" :class="classPrefix && `${classPrefix}-wrapper`" :style="{style}">
+  <div class="layout-wrapper" :class="classPrefix && `${classPrefix}-wrapper`" :style="{layoutStyle}">
     <div class="content" :class="classPrefix && `${classPrefix}-content`">
       <slot/>
     </div>
@@ -9,7 +9,7 @@
 
 <script lang="ts">
   export default {
-    props: ['classPrefix', 'style'],
+    props: ['classPrefix', 'layoutStyle'],
     name: 'Layout'
   };
 </script>
