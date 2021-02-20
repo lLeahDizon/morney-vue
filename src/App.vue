@@ -7,7 +7,6 @@
 <style lang="scss">
   @import "~@/assets/style/helper.scss";
   @import "~@/assets/style/reset.scss";
-  @import "~ant-design-vue/dist/antd.css";
 
   body {
     -webkit-font-smoothing: antialiased;
